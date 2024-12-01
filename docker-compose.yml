@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:5.0
+    container_name: banque-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: banque-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/banque
+    depends_on:
+      - mongo
+    restart: always
+
+  swagger-ui:
+      image: swaggerapi/swagger-ui:latest
+      container_name: swagger-ui
+      ports:
+        - "8081:8080"
+      environment:
+        SWAGGER_JSON: "/swagger/swagger.json"
+      volumes:
+        - ./swagger:/swagger
+      restart: always
+
+volumes:
+  mongo-data:

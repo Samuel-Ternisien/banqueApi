@@ -1,0 +1,372 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Banking System API"
+  },
+  "paths": {
+    "/api/users": {
+      "get": {
+        "summary": "Get all users",
+        "description": "Retrieve a list of all users in the system.",
+        "responses": {
+          "200": {
+            "description": "A list of users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "description": "Add a new user to the system.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User to be created",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The created user",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "summary": "Get a user by ID",
+        "description": "Retrieve the details of a specific user by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested user",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user by ID",
+        "description": "Remove a specific user by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the user to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User deleted successfully"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/contracts": {
+      "get": {
+        "summary": "Get all contracts",
+        "description": "Retrieve a list of all contracts in the system.",
+        "responses": {
+          "200": {
+            "description": "A list of contracts",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Contract"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new contract",
+        "description": "Add a new contract to the system.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Contract to be created",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Contract"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The created contract",
+            "schema": {
+              "$ref": "#/definitions/Contract"
+            }
+          }
+        }
+      }
+    },
+    "/api/contracts/{id}": {
+      "get": {
+        "summary": "Get a contract by ID",
+        "description": "Retrieve the details of a specific contract by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the contract"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested contract",
+            "schema": {
+              "$ref": "#/definitions/Contract"
+            }
+          },
+          "404": {
+            "description": "Contract not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a contract by ID",
+        "description": "Modify the details of a specific contract by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the contract to update"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated contract details",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Contract"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The updated contract",
+            "schema": {
+              "$ref": "#/definitions/Contract"
+            }
+          },
+          "404": {
+            "description": "Contract not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a contract by ID",
+        "description": "Remove a specific contract by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the contract to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Contract deleted successfully"
+          },
+          "404": {
+            "description": "Contract not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "discriminator": "type",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier of the user"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the user"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The email address of the user"
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of user (e.g., 'client', 'Conseiller')"
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "type"
+      ]
+    },
+    "Client": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/User"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ConseillerId": {
+              "type": "string",
+              "description": "The ID of the Conseiller associated with the client"
+            },
+            "contractIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "The list of contract IDs associated with the client"
+            }
+          }
+        }
+      ]
+    },
+    "Conseiller": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/User"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "clientIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "The list of client IDs associated with the Conseiller"
+            }
+          }
+        }
+      ]
+    },
+    "Contract": {
+      "type": "object",
+      "discriminator": "type",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier of the contract"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "The ID of the client associated with the contract"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": "The total amount of the contract"
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of the contract (e.g., 'comptebancaire', 'livreta', 'assurancevie')"
+        }
+      },
+      "required": [
+        "clientId",
+        "amount",
+        "type"
+      ]
+    },
+    "CompteBancaire": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Contract"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "decouvertAutorise": {
+              "type": "number",
+              "format": "double",
+              "description": "The authorized overdraft amount"
+            }
+          }
+        }
+      ]
+    },
+    "LivretA": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Contract"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tauxInteret": {
+              "type": "number",
+              "format": "double",
+              "description": "The interest rate of the Livret A account"
+            }
+          }
+        }
+      ]
+    },
+    "AssuranceVie": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Contract"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "montantAction": {
+              "type": "number",
+              "format": "double",
+              "description": "The amount invested in actions"
+            },
+            "montantEuros": {
+              "type": "number",
+              "format": "double",
+              "description": "The amount invested in euros"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
