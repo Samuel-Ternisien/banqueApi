@@ -1,0 +1,111 @@
+### 1. Création d'un conseiller
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "type": "advisor",
+  "name": "John Advisor",
+  "email": "john.advisor@example.com"
+}
+
+
+###
+
+### 2. Création d'un client associé au conseiller
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "type": "client",
+  "name": "Jane Client",
+  "email": "jane.client@example.com",
+  "advisorId": "674cc55d5112731ab0f90ac7"
+}
+
+
+
+###
+
+### 3. Création d'un contrat bancaire pour le client
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+
+{
+  "type": "comptebancaire",
+  "clientId": "674cc75adced613c727756bd",
+  "amount": 1000.0,
+  "decouvertAutorise": 200.0
+}
+
+
+
+###
+
+### 4. Création d'un contrat LivretA pour le client
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+
+{
+  "type": "livreta",
+  "clientId": "674cc75adced613c727756bd",
+  "amount": 5000.0,
+  "tauxInteret": 0.015
+}
+
+
+###
+
+### 5. Récupération de tous les utilisateurs
+GET http://localhost:8080/api/users
+
+
+###
+
+### 6. Récupération d'un utilisateur spécifique (le client créé)
+GET http://localhost:8080/api/users/674cc75adced613c727756bd
+
+
+###
+
+### 7. Récupération de tous les contrats
+GET http://localhost:8080/api/contracts
+
+
+###
+
+### 8. Récupération d'un contrat spécifique (le contrat bancaire)
+GET http://localhost:8080/api/contracts/674cc8b38fd4b242f9e5cf0d
+
+
+###
+
+### 9. Mise à jour d'un contrat (modification du montant)
+PUT http://localhost:8080/api/contracts/674cc8b38fd4b242f9e5cf0d
+Content-Type: application/json
+
+{
+  "type": "comptebancaire",
+  "amount": -50
+}
+
+
+###
+
+### 10. Suppression du client
+DELETE http://localhost:8080/api/users/674cc75adced613c727756bd
+
+
+###
+
+### 11. Suppression du conseiller
+DELETE http://localhost:8080/api/users/{{$prev[1].body.id}}
+
+###
+
+### 12. Vérification finale : Récupération de tous les utilisateurs
+GET http://localhost:8080/api/users
+
+###
+
+### 13. Vérification finale : Récupération de tous les contrats
+GET http://localhost:8080/api/contracts
