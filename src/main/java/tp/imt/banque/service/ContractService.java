@@ -32,8 +32,21 @@ public class ContractService {
 
     public Contract createContract(Contract contract) {
         // Vérifie que le client existe
+
         User client = userRepository.findById(contract.getClientId())
                 .orElseThrow(() -> new RuntimeException("Client not found with ID: " + contract.getClientId()));
+
+        // Récupère tous les contrats existants du client
+        List<Contract> existingContracts = contractRepository.findByClientId(contract.getClientId());
+
+        // Ajoute le nouveau contrat pour validation
+        existingContracts.add(contract);
+
+        // Valide que les types de contrats sont uniques
+        if(existingContracts.stream()
+                .map(Contract::getClass)
+                .distinct()
+                .count() < existingContracts.size()) throw new RuntimeException("Contract already exists");
 
         // Initialise les champs spécifiques au contrat
         contract.setClientId(contract.getClientId());
@@ -95,7 +108,7 @@ public class ContractService {
                 Client client = (Client) userRepository.findById(compteBancaire.getClientId()).orElseThrow();
                 eventPublisherService.publishOverdraftExceededEvent(
                         compteBancaire.getId(),
-                        client.getAdvisorId()
+                        client.getConseillerId()
                 );
             }
 

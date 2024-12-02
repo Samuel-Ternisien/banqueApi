@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Client.class, name = "client"),
-        @JsonSubTypes.Type(value = Conseiller.class, name = "advisor")
+        @JsonSubTypes.Type(value = Conseiller.class, name = "conseiller")
 })
 @Document(collection = "users")
 @Data

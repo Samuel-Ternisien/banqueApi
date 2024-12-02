@@ -3,7 +3,6 @@ package tp.imt.banque.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tp.imt.banque.model.Client;
 import tp.imt.banque.model.User;
 import tp.imt.banque.service.UserService;
 

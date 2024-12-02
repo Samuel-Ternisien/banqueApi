@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AdvisorNotFoundException.class)
-    public ResponseEntity<String> handleAdvisorNotFoundException(AdvisorNotFoundException ex) {
+    @ExceptionHandler(ConseillerNotFoundException.class)
+    public ResponseEntity<String> handleConseillerNotFoundException(ConseillerNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(AdvisorNotSpecifiedException.class)
-    public ResponseEntity<String> handleAdvisorNotSpecifiedException(AdvisorNotSpecifiedException ex) {
+    @ExceptionHandler(ConseillerNotSpecifiedException.class)
+    public ResponseEntity<String> handleConseillerNotSpecifiedException(ConseillerNotSpecifiedException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
