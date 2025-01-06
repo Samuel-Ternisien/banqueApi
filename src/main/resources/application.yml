@@ -5,7 +5,3 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/banque
-logging:
-  level:
-    org.springframework: DEBUG
-    com.fasterxml.jackson.databind: DEBUG
