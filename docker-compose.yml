@@ -23,15 +23,61 @@ services:
     restart: always
 
   swagger-ui:
-      image: swaggerapi/swagger-ui:latest
-      container_name: swagger-ui
-      ports:
-        - "8081:8080"
-      environment:
-        SWAGGER_JSON: "/swagger/swagger.json"
-      volumes:
-        - ./swagger:/swagger
-      restart: always
+    image: swaggerapi/swagger-ui:latest
+    container_name: swagger-ui
+    ports:
+      - "8081:8080"
+    environment:
+      SWAGGER_JSON: "/swagger/swagger.json"
+    volumes:
+      - ./swagger:/swagger
+    restart: always
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar
+      - SONAR_JDBC_URL=jdbc:postgresql://db:5432/sonar
+    depends_on:
+      - db
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/api/system/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  db:
+    image: postgres:15
+    container_name: postgres-sonar
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+      POSTGRES_DB: sonar
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: always
+
+  analyzer:
+    image: maven:3.8.3-openjdk-17
+    container_name: sonar-analyzer
+    working_dir: /app
+    volumes:
+      - ~/.m2:/root/.m2
+      - .:/app
+    depends_on:
+      sonarqube:
+        condition: service_healthy
+    command: mvn clean verify sonar:sonar -Dsonar.token=$SONAR_TOKEN
+    environment:
+      - SONAR_HOST_URL=http://sonarqube:9000
 
 volumes:
   mongo-data:
+  db-data:
