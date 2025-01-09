@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   mongo:
-    image: mongo:5.0
+    image: mongo:4.0
     container_name: banque-mongo
     ports:
       - "27017:27017"
@@ -9,9 +9,7 @@ services:
       - mongo-data:/data/db
     restart: always
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: banqueapi:latest
     container_name: banque-app
     ports:
       - "8080:8080"
