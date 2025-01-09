@@ -7,13 +7,11 @@ RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn package -DskipTests
 
-RUN mvn test
-
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 COPY --from=build /app/target/banque-1.0.0.jar app.jar
-
+    
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -1,4 +1,4 @@
-package tp.imt.banque.service;
+package tp.imt.banque;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import tp.imt.banque.model.*;
 import tp.imt.banque.repository.ContractRepository;
 import tp.imt.banque.repository.UserRepository;
+import tp.imt.banque.service.ContractService;
+import tp.imt.banque.service.EventPublisherService;
 
 import java.util.*;
 
