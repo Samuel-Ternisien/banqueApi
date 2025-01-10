@@ -20,6 +20,12 @@ public class ContractController {
         return ResponseEntity.ok(contractService.getAllContracts());
     }
 
+    @GetMapping("/hello-world")
+    public String helloworld()
+    {
+        return "Hello world from a new Version";
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Contract> getContractById(@PathVariable String id) {
         return ResponseEntity.ok(contractService.getContractById(id));
